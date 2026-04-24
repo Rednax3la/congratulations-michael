@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achievement Award | Michael Ndindi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #34d399;
+      --green-dark: #059669;
+      --green-glow: #6ee7b7;
+      --teal: #2dd4bf;
+      --bg: #030d0a;
+      --surface: rgba(52,211,153,0.05);
+      --border: rgba(52,211,153,0.15);
+      --text: #d1fae5;
+      --muted: #6b7a74;
+    }
+
+    body {
+      font-family: 'DM Serif Display', Georgia, serif;
+      background: radial-gradient(ellipse at 30% 0%, #001a0f 0%, #030d0a 60%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      position: relative;
+    }
+
+    /* Grid lines background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(52,211,153,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(52,211,153,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      width: 100%;
+    }
+
+    /* Running track top bar */
+    .track-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: slide-in 0.7s ease forwards;
+    }
+    .track-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.7); }
+    }
+    .track-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--green), var(--teal), transparent);
+    }
+    .track-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--green);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 2.8rem 2.4rem;
+      box-shadow:
+        0 0 120px rgba(52,211,153,0.06),
+        0 20px 60px rgba(0,0,0,0.7),
+        inset 0 0 80px rgba(52,211,153,0.02);
+      text-align: center;
+      opacity: 0;
+      animation: fade-up 0.8s ease 0.2s forwards;
+    }
+
+    .event-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      background: rgba(52,211,153,0.1);
+      border: 1px solid rgba(52,211,153,0.2);
+      color: var(--green);
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .name {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.4rem, 7vw, 3.8rem);
+      font-style: italic;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #6ee7b7 0%, #34d399 50%, #2dd4bf 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.4rem;
+    }
+
+    .name-mono {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .divider {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.8rem 0;
+    }
+    .div-line { height: 1px; background: var(--border); }
+    .div-icon { color: var(--green); font-size: 1rem; }
+
+    .body-text {
+      color: var(--text);
+      font-size: 0.97rem;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .body-text strong { color: var(--green-glow); font-style: italic; }
+
+    /* Dual badge highlight for accuracy + speed */
+    .badges {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(52,211,153,0.07);
+      border: 1px solid rgba(52,211,153,0.18);
+      border-radius: 16px;
+      padding: 1rem 1.4rem;
+      flex: 1;
+      min-width: 120px;
+    }
+    .badge-icon { font-size: 1.6rem; }
+    .badge-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--green);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .badge-desc {
+      font-size: 0.82rem;
+      color: var(--text);
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+    .stat-card {
+      background: rgba(52,211,153,0.04);
+      border: 1px solid rgba(52,211,153,0.1);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+    }
+    .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .stat-value {
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .stat-value .hl { color: var(--green-glow); }
+
+    .verse {
+      font-style: italic;
+      color: var(--muted);
+      font-size: 0.83rem;
+      line-height: 1.65;
+      margin-bottom: 2rem;
+      padding: 0.8rem 1.2rem;
+      border: 1px solid rgba(52,211,153,0.08);
+      border-radius: 10px;
+      background: rgba(52,211,153,0.03);
+    }
+
+    .download-btn {
+      display: inline-block;
+      width: 100%;
+      background: linear-gradient(135deg, #059669 0%, #2dd4bf 100%);
+      color: #030d0a;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 1.1rem 2rem;
+      border-radius: 100px;
+      text-decoration: none;
+      box-shadow: 0 4px 24px rgba(52,211,153,0.3);
+      transition: transform 0.18s, box-shadow 0.18s, filter 0.18s;
+    }
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 36px rgba(52,211,153,0.45);
+      filter: brightness(1.06);
+    }
+    .download-btn:active { transform: scale(0.98); }
+
+    .footer {
+      margin-top: 1.6rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    @keyframes slide-in {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 520px) {
+      .card { padding: 2rem 1.2rem; }
+      .stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+
+    <div class="track-bar">
+      <div class="track-dot"></div>
+      <div class="track-line"></div>
+      <span class="track-label">Crossroads Bible Trivia 2026</span>
+    </div>
+
+    <div class="card">
+      <div class="event-tag">◈ Achievement Unlocked</div>
+
+      <h1 class="name">Michael Ndindi</h1>
+      <p class="name-mono">Top Performer — Lobbies 2 &amp; 3</p>
+
+      <div class="divider">
+        <div class="div-line"></div>
+        <span class="div-icon">✦</span>
+        <div class="div-line"></div>
+      </div>
+
+      <p class="body-text">
+        Awarded to Michael Ndindi for achieving <strong>top positions in two distinct categories</strong> 
+        during the April 2026 Crossroads Bible Trivia — demonstrating both the precision of someone 
+        who studies carefully and the swiftness of one whose knowledge flows from the heart. 
+        His dual recognition in accuracy and speed is a rare honour.
+      </p>
+
+      <div class="badges">
+        <div class="badge">
+          <span class="badge-icon">🎯</span>
+          <span class="badge-title">Accuracy</span>
+          <span class="badge-desc">Top position<br/>Lobby 2</span>
+        </div>
+        <div class="badge">
+          <span class="badge-icon">⚡</span>
+          <span class="badge-title">Speed</span>
+          <span class="badge-desc">Top position<br/>Lobby 3</span>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <p class="stat-label">Rankings</p>
+          <p class="stat-value">
+            <span class="hl">Lobby 2</span> — Accuracy Leader<br/>
+            <span class="hl">Lobby 3</span> — Speed Leader
+          </p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Program</p>
+          <p class="stat-value">
+            Crossroads<br/>
+            April 2026 Trivia
+          </p>
+        </div>
+      </div>
+
+      <div class="verse">
+        "Do you not know that in a race all the runners run, but only one gets the prize? Run in such a way as to get the prize."<br/>
+        — 1 Corinthians 9:24
+      </div>
+
+      <a href="Michael_certificate.pdf" download="Michael_Ndindi_Certificate.pdf" class="download-btn">
+        → Download Official Certificate (PDF)
+      </a>
+
+      <p class="footer">
+        Awarded by Alexander Wambugu &bull; Crossroads Coordinator &bull; April 2026
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>
